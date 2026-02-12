@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
@@ -10,9 +11,11 @@ export default function Home() {
       <p className="text-lg md:text-2xl mb-8 drop-shadow-md">
         Share your thoughts freely or discover <br /> what others say about you anonymously
       </p>
-      <button className="bg-[#73a9cf] hover:bg-blue-700 transform hover:scale-105 transition-all text-white font-semibold px-6 py-3 rounded-lg shadow-lg">
-        Send a Message Now
-      </button>
+      <Link to="/SendMessage">
+        <button className="bg-[#73a9cf] hover:bg-blue-700 transform hover:scale-105 transition-all text-white font-semibold px-6 py-3 rounded-lg shadow-lg">
+          Send a Message Now
+        </button>
+      </Link>
     </div>
   )
 }

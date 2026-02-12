@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
+
 export default function SendMessage() {
   const [users, setUsers] = useState([]);
   const [receiverId, setReceiverId] = useState("");
@@ -55,17 +56,20 @@ export default function SendMessage() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow-md mb-4">
+    <div className="max-w-md  mx-auto bg-white p-6 rounded-lg shadow-md mb-16 mt-20 ">
       <Toaster position="top-right" />
 
-      <h2 className="text-xl font-bold mb-4">Send Message</h2>
+      <h2 className="  mb-6  text-2xl font-bold text-[#0d4369]">Send Message</h2>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">Receiver</label>
+        <label className="block text-sm font-medium mb-1 text-[#156faf]">Receiver</label>
         <select
           value={receiverId}
           onChange={(e) => setReceiverId(e.target.value)}
-          className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+          className="w-full border border-gray-300 rounded px-3 py-2 
+                 focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
+
+
         >
           <option value="">Select a user</option>
           {users.map((user) => (
@@ -77,12 +81,13 @@ export default function SendMessage() {
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">Message</label>
+        <label className="block text-sm font-medium mb-1 text-[#156faf]">Message</label>
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           rows={4}
-          className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+          className="w-full border border-gray-300  px-3 py-2 
+          rounded focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
         />
       </div>
 

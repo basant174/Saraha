@@ -68,9 +68,9 @@ export default function UpdatePassword() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-sm mb-8"
+      className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-lg mb-8"
     >
-      <h1 className="text-2xl font-bold text-gray-800 mb-8">
+      <h1 className="text-2xl font-bold text-[#0d4369] mb-8">
         Update Password
       </h1>
 
@@ -83,7 +83,8 @@ export default function UpdatePassword() {
           name="password"
           value={formData.password}
           onChange={handleChange}
-          className="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 border border-gray-300 rounded
+           focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
         />
       </div>
 
@@ -96,7 +97,8 @@ export default function UpdatePassword() {
           name="newPassword"
           value={formData.newPassword}
           onChange={handleChange}
-          className="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 border border-gray-300 rounded
+           focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
         />
       </div>
 
@@ -109,7 +111,8 @@ export default function UpdatePassword() {
           name="confirmPassword"
           value={formData.confirmPassword}
           onChange={handleChange}
-          className="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 border border-gray-300 rounded
+           focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
         />
       </div>
 
@@ -117,7 +120,7 @@ export default function UpdatePassword() {
         <button
           type="submit"
           disabled={loading}
-          className="bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700"
+          className="bg-gray-200 text-gray-700 py-2 px-6 font-medium hover:bg-[#5b9ac7] hover:text-white transition"
         >
           {loading ? "Updating..." : "Confirm Password"}
         </button>

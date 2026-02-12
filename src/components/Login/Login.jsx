@@ -36,7 +36,7 @@ export default function Login() {
   //       localStorage.setItem("token", response.data.data.creidentails.accessToken );
 
 
-        
+
   //       console.log("Saved token:", response.data.data.creidentails.accessToken);
   //       console.log("From localStorage:", localStorage.getItem("token"));
 
@@ -71,47 +71,47 @@ export default function Login() {
   //   }
   // }
   async function sendDataToLogin(values) {
-  let toastId = toast.loading("Logging in...");
-  setApiError(null);
+    let toastId = toast.loading("Logging in...");
+    setApiError(null);
 
-  try {
-    const response = await axios.post("/api/v1/auth/login", values);
+    try {
+      const response = await axios.post("/api/v1/auth/login", values);
 
-    // نحفظ الـ token فقط
-    const accessToken = response.data.data.creidentails.accessToken;
-    localStorage.setItem("token", accessToken);
 
-    // جلب بيانات اليوزر الحالي
-    const resProfile = await axios.get("http://localhost:3000/api/v1/user/", {
-      headers: { Authorization: `USER ${accessToken}` },
-    });
+      const accessToken = response.data.data.creidentails.accessToken;
+      localStorage.setItem("token", accessToken);
 
-    // array كل اليوزرات
-    const currentUser = resProfile.data.data.users.find(
-      u => u.email === values.email // نقدر نستخدم الإيميل لمطابقة اليوزر الحالي
-    );
+   
+      const resProfile = await axios.get("/api/v1/user/", {
+        headers: { Authorization: `ADMIN ${accessToken}` },
+      });
 
-    if (currentUser) {
-      localStorage.setItem("userId", currentUser._id); // نخزن ال id
+      // array كل اليوزرات
+      const currentUser = resProfile.data.data.users.find(
+        u => u.email === values.email // نقدر نستخدم الإيميل لمطابقة اليوزر الحالي
+      );
+
+      if (currentUser) {
+        localStorage.setItem("userId", currentUser._id); // نخزن ال id
+      }
+
+      toast.success("Logged in successfully!");
+      setTimeout(() => {
+        navigate("/home");
+      }, 1000);
+
+    } catch (error) {
+      console.log(error.response);
+      const status = error.response?.status;
+
+      if (status === 400) toast.error("Email or password is incorrect.");
+      else if (status === 404) toast.error("This email is incorrect.");
+      else toast.error("Something went wrong. Please try again.");
+
+    } finally {
+      toast.dismiss(toastId);
     }
-
-    toast.success("Logged in successfully!");
-    setTimeout(() => {
-      navigate("/home");
-    }, 1000);
-
-  } catch (error) {
-    console.log(error.response);
-    const status = error.response?.status;
-
-    if (status === 400) toast.error("Email or password is incorrect.");
-    else if (status === 404) toast.error("This email is incorrect.");
-    else toast.error("Something went wrong. Please try again.");
-
-  } finally {
-    toast.dismiss(toastId);
   }
-}
 
 
   const formik = useFormik({
@@ -147,7 +147,9 @@ export default function Login() {
               value={formik.values.email}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-200 focus:outline-none focus:border-sky-300 placeholder-gray-400"
+              className="w-full px-4 py-2.5 text-sm rounded-lg border-gray-200
+               focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
+
             />
             {formik.touched.email && formik.errors.email && (
               <p className="text-red-500 text-sm mt-1">{formik.errors.email}</p>
@@ -162,8 +164,8 @@ export default function Login() {
               value={formik.values.password}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-200 focus:outline-none focus:border-sky-300 placeholder-gray-400"
-            />
+              className="w-full px-4 py-2.5 text-sm rounded-lg border-gray-200
+               focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"            />
             {formik.touched.password && formik.errors.password && (
               <p className="text-red-500 text-sm mt-1">{formik.errors.password}</p>
             )}
@@ -180,14 +182,14 @@ export default function Login() {
             Log In
           </button>
 
-                  {/* تحت زرار الدخول مباشرة */}
-<div className="text-left mt-2">
-  <Link
-    to="/ForgetPassword" // هنا رابط الصفحة اللي هتعمل فيها الريست
-    className="text-xs text-sky-500 hover:underline">
-    Forgot Password?
-  </Link>
-</div>
+          {/* تحت زرار الدخول مباشرة */}
+          <div className="text-left mt-2">
+            <Link
+              to="/ForgetPassword" // هنا رابط الصفحة اللي هتعمل فيها الريست
+              className="text-xs text-sky-500 hover:underline">
+              Forgot Password?
+            </Link>
+          </div>
         </form>
 
         <p className="text-center text-xs text-gray-400 mt-3">
@@ -196,9 +198,6 @@ export default function Login() {
             Sign up
           </Link>
         </p>
-        {/* تحت زرار الدخول مباشرة */}
-
-
       </div>
     </section>
   );

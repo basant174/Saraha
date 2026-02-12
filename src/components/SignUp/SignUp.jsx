@@ -13,33 +13,33 @@ export default function Signup() {
   const regexPassword =
     /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/;
 
-const validationSchema = object({
-  firstName: string()
-    .required("First Name is required")
-    .min(2, "First Name must be at least 2 characters")
-    .max(20, "First Name must be at most 20 characters"),
-    
-  lastName: string()
-    .required("Last Name is required")
-    .min(2, "Last Name must be at least 2 characters")
-    .max(20, "Last Name must be at most 20 characters"),
-    
-  email: string().required("Email is required").email("Email is invalid"),
-  
-  password: string()
-    .required("Password is required")
-    .matches(
-      regexPassword,
-      "Password should be at least 8 characters, include uppercase, lowercase, number, and special character"
-    ),
-    
-  confirmPassword: string()
-    .required("Confirm Password is required")
-    .oneOf([ref("password")], "Passwords must match"),
-    
-  phone: string().required("Phone is required"),
-  gender: string().required("Gender is required"),
-});
+  const validationSchema = object({
+    firstName: string()
+      .required("First Name is required")
+      .min(2, "First Name must be at least 2 characters")
+      .max(20, "First Name must be at most 20 characters"),
+
+    lastName: string()
+      .required("Last Name is required")
+      .min(2, "Last Name must be at least 2 characters")
+      .max(20, "Last Name must be at most 20 characters"),
+
+    email: string().required("Email is required").email("Email is invalid"),
+
+    password: string()
+      .required("Password is required")
+      .matches(
+        regexPassword,
+        "Password should be at least 8 characters, include uppercase, lowercase, number, and special character"
+      ),
+
+    confirmPassword: string()
+      .required("Confirm Password is required")
+      .oneOf([ref("password")], "Passwords must match"),
+
+    phone: string().required("Phone is required"),
+    gender: string().required("Gender is required"),
+  });
 
 
   async function sendDataToSignup(values) {
@@ -48,20 +48,20 @@ const validationSchema = object({
 
     try {
       const response = await axios.post(
-        "/api/v1/auth/signup",
-        values
+"/api/v1/auth/signup",
+        values,
       );
 
-  if (response.data.message === "User created successfully") {
-  toast.success("Account created successfully!");
-  setTimeout(() => {
-    navigate("/ConfirmEmail", { state: { email: values.email } });
-  }, 2000);
-}
+      if (response.data.message === "User created successfully") {
+        toast.success("Account created successfully!");
+        setTimeout(() => {
+          navigate("/ConfirmEmail", { state: { email: values.email } });
+        }, 2000);
+      }
 
 
     } catch (error) {
-      console.log(error.response?.data); 
+      console.log(error.response?.data);
       toast.error(error.response?.data?.message || "Something went wrong!");
     }
     finally {
@@ -78,6 +78,7 @@ const validationSchema = object({
       confirmPassword: "",
       phone: "",
       gender: "",
+      role: "ADMIN",
     },
     validationSchema,
     onSubmit: sendDataToSignup,
@@ -107,7 +108,8 @@ const validationSchema = object({
                 value={formik.values.firstName}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-200 focus:outline-none focus:border-yellow-500 placeholder-gray-400"
+                className="w-full px-4 py-2.5 text-sm rounded-lg border-gray-200
+               focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
               />
               {formik.touched.firstName && formik.errors.firstName && (
                 <p className="text-red-500 text-sm mt-1">
@@ -124,7 +126,8 @@ const validationSchema = object({
                 value={formik.values.lastName}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-200 focus:outline-none focus:border-yellow-500 placeholder-gray-400"
+                className="w-full px-4 py-2.5 text-sm rounded-lg border-gray-200
+               focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
               />
               {formik.touched.lastName && formik.errors.lastName && (
                 <p className="text-red-500 text-sm mt-1">
@@ -142,7 +145,8 @@ const validationSchema = object({
               value={formik.values.email}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-200 focus:outline-none focus:border-yellow-500 placeholder-gray-400"
+              className="w-full px-4 py-2.5 text-sm rounded-lg border-gray-200
+               focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
             />
             {formik.touched.email && formik.errors.email && (
               <p className="text-red-500 text-sm mt-1">{formik.errors.email}</p>
@@ -157,7 +161,8 @@ const validationSchema = object({
               value={formik.values.password}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-200 focus:outline-none focus:border-yellow-500 placeholder-gray-400"
+              className="w-full px-4 py-2.5 text-sm rounded-lg border
+               border-gray-200 focus:outline-none focus:border-yellow-500 placeholder-gray-400"
             />
             {formik.touched.password && formik.errors.password && (
               <p className="text-red-500 text-sm mt-1">{formik.errors.password}</p>
@@ -172,7 +177,8 @@ const validationSchema = object({
               value={formik.values.confirmPassword}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-200 focus:outline-none focus:border-yellow-500 placeholder-gray-400"
+              className="w-full px-4 py-2.5 text-sm rounded-lg  border-gray-200
+               focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
             />
             {formik.touched.confirmPassword && formik.errors.confirmPassword && (
               <p className="text-red-500 text-sm mt-1">
@@ -189,7 +195,8 @@ const validationSchema = object({
               value={formik.values.phone}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-200 focus:outline-none focus:border-yellow-500 placeholder-gray-400"
+              className="w-full px-4 py-2.5 text-sm rounded-lg border-gray-200
+               focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
             />
             {formik.touched.phone && formik.errors.phone && (
               <p className="text-red-500 text-sm mt-1">{formik.errors.phone}</p>

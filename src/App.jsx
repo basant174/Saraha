@@ -3,12 +3,8 @@ import { createHashRouter, RouterProvider } from 'react-router-dom'
 import "flowbite";
 import Login from './components/Login/Login'
 import Layout from './components/Layout/Layout'
-//import UserContextProvider from './context/userContext.jsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-//import WishListContextProvider from './context/userWishlist.jsx';
 import { Toaster } from 'react-hot-toast';
-//import RateContextProvider from './context/userRate.jsx';
-//import UnitContextProvider from './context/UnitContext.jsx';
 import Signup from './components/SignUp/SignUp.jsx';
 import Home from './components/Home/Home.jsx';
 import ConfirmEmail from './components/ConfirmEmail/ConfirmEmail.jsx';
@@ -22,6 +18,7 @@ import ResetPassword from './components/ResetPassword/ResetPassword.jsx';
 import ProfileSettings from './components/ProfileSettings/ProfileSettings.jsx';
 import SendMessage from './components/SendMessage/SendMessage.jsx';
 import MessagesList from './components/MessagesList/MessagesList.jsx';
+import MyMessages from './components/MyMessages/MyMessages.jsx';
 
 function App() {
   const queryClient = new QueryClient();
@@ -41,8 +38,7 @@ function App() {
         { path: 'ProfileSettings', element: <ProfileSettings /> },
         { path: 'SendMessage', element: <SendMessage/> },
         { path: 'MessagesList', element: <MessagesList/> },
-
-
+        { path: 'MyMessages', element: <MyMessages/> },
 
       ]},
   ])

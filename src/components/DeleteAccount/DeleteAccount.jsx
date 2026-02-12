@@ -39,7 +39,7 @@ export default function DeleteAccount({ isFrozen }) {
 
   return (
     <div className="max-w-2xl mx-auto mt-8">
-      <div className="bg-white p-6 rounded-lg shadow-sm">
+      <div className="bg-white p-6 rounded-lg shadow-lg">
         <h2 className="text-xl font-bold text-gray-800 mb-4">Delete Account</h2>
         <p className="text-sm text-gray-600 mb-4">
           Deleting your account is permanent and cannot be undone. You must freeze your account first.
