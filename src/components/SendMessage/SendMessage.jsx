@@ -1,50 +1,34 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
-
-export default function SendMessage() {
-  const [users, setUsers] = useState([]);
-  const [receiverId, setReceiverId] = useState("");
+export default function SendMessage({ sharedId }) {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // جلب كل اليوزرات لاختيار المستلم
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get("/api/v1/user/", {
-          headers: { Authorization: `USER ${token}` },
-        });
-        setUsers(res.data.data.users || []);
-      } catch (err) {
-        console.error("Error fetching users:", err);
-        toast.error("Failed to load users");
-      }
-    };
-    fetchUsers();
-  }, []);
-
   const handleSend = async () => {
-    if (!receiverId) {
-      toast.error("Please select a receiver!");
+    const token = localStorage.getItem("token");
+    const trimmedContent = content.trim();
+
+    if (!sharedId) {
+      toast.error("No recipient selected!");
       return;
     }
-    if (!content.trim()) {
-      toast.error("Message cannot be empty!");
+
+    if (trimmedContent.length < 2) {
+      toast.error("Message must be at least 2 characters");
       return;
     }
 
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.post(
-        `/api/v1/message/send-message/${receiverId}`,
-        { content },
-        { headers: { Authorization: `USER ${token}` } }
-      );
-      console.log("Message sent:", res.data);
+await axios.post(
+  `/api/v1/message/send-message/${sharedId}`, // sharedId = _id
+  { content: trimmedContent },
+  { headers: { Authorization: `USER ${token}` } }
+);
+
+
       toast.success("Message sent!");
       setContent("");
     } catch (err) {
@@ -56,38 +40,20 @@ export default function SendMessage() {
   };
 
   return (
-    <div className="max-w-md  mx-auto bg-white p-6 rounded-lg shadow-md mb-16 mt-20 ">
+    <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md mb-16 mt-20">
       <Toaster position="top-right" />
 
-      <h2 className="  mb-6  text-2xl font-bold text-[#0d4369]">Send Message</h2>
+      <h2 className="mb-6 text-2xl font-bold text-[#0d4369]">Send Message</h2>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-1 text-[#156faf]">Receiver</label>
-        <select
-          value={receiverId}
-          onChange={(e) => setReceiverId(e.target.value)}
-          className="w-full border border-gray-300 rounded px-3 py-2 
-                 focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
-
-
-        >
-          <option value="">Select a user</option>
-          {users.map((user) => (
-            <option key={user._id} value={user._id}>
-              {user.firstName} {user.lastName} 
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1 text-[#156faf]">Message</label>
+        <label className="block text-sm font-medium mb-1 text-[#156faf]">
+          Message
+        </label>
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           rows={4}
-          className="w-full border border-gray-300  px-3 py-2 
-          rounded focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
+          className="w-full border border-gray-300 px-3 py-2 rounded focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
         />
       </div>
 

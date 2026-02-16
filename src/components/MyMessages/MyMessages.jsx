@@ -18,7 +18,7 @@ export default function MyMessages() {
         },
         params: {
           page,
-          limit: 6,
+          limit: 4,
         },
       });
 

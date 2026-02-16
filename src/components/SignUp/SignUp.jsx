@@ -5,6 +5,7 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, Link } from "react-router-dom";
+import GoogleSignup from "../GoogleSignup/GoogleSignup";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -85,11 +86,11 @@ export default function Signup() {
   });
 
   return (
-    <section className="min-h-screen bg-sky-200 flex items-center justify-center">
-      <div className="bg-white w-[320px] rounded-3xl shadow-lg px-6 py-8 relative">
+    <section className="min-h-screen bg-sky-200 flex items-center justify-center ">
+      <div className="bg-white w-[320px] rounded-3xl shadow-lg px-6 py-8 relative my-8">
         {/* Decorative circles */}
         <span className="w-3 h-3 bg-sky-200 rounded-full absolute top-6 left-6"></span>
-        <span className="w-4 h-4 border border-sky-300 rounded-full absolute top-10 right-8"></span>
+        <span className="w-4 h-4  border border-sky-300 rounded-full absolute top-10 right-8"></span>
 
         <h2 className="text-center text-2xl font-semibold text-gray-800 mb-1">
           Sign up
@@ -98,7 +99,7 @@ export default function Signup() {
           Create an account, it’s free
         </p>
 
-        <form className="space-y-4" onSubmit={formik.handleSubmit}>
+        <form className="space-y-4 " onSubmit={formik.handleSubmit}>
           <div className="flex gap-3">
             <div className="w-1/2">
               <input
@@ -245,6 +246,16 @@ export default function Signup() {
           >
             Sign Up
           </button>
+
+
+
+          <div className="my-4 flex items-center gap-3">
+  <div className="flex-1 h-px bg-gray-200"></div>
+  <span className="text-xs text-gray-400">OR</span>
+  <div className="flex-1 h-px bg-gray-200"></div>
+</div>
+
+<GoogleSignup/>
         </form>
 
         <p className="text-center text-xs text-gray-400 mt-5">

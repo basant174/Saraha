@@ -19,6 +19,10 @@ import ProfileSettings from './components/ProfileSettings/ProfileSettings.jsx';
 import SendMessage from './components/SendMessage/SendMessage.jsx';
 import MessagesList from './components/MessagesList/MessagesList.jsx';
 import MyMessages from './components/MyMessages/MyMessages.jsx';
+import { GoogleLogin } from '@react-oauth/google';
+import GoogleSignup from './components/GoogleSignup/GoogleSignup.jsx';
+import GetShareLink from './components/GetShareLink/GetShareLink.jsx';
+import PublicProfile from './components/PublicProfile/PublicProfile.jsx';
 
 function App() {
   const queryClient = new QueryClient();
@@ -39,15 +43,25 @@ function App() {
         { path: 'SendMessage', element: <SendMessage/> },
         { path: 'MessagesList', element: <MessagesList/> },
         { path: 'MyMessages', element: <MyMessages/> },
+        { path: 'GoogleSignup', element: <GoogleSignup/> },
+        { path: 'GetShareLink', element: <GetShareLink/> },
+        { path:"/u/:shareId", element:<PublicProfile/>} 
+
+
+
+
+
 
       ]},
   ])
   return (
     <>
+
           <QueryClientProvider client={queryClient}>
               <RouterProvider router={router}></RouterProvider>
               <Toaster />
           </QueryClientProvider>
+
     </>
   )
 }
