@@ -73,7 +73,7 @@ export default function ProfileSettings() {
             <img
               src={
                 photo ||
-                "https://i.pinimg.com/736x/9e/d9/fc/9ed9fc6f5360d475c83e1201ad2a909c.jpg"
+                "https://i.pinimg.com/736x/e5/9f/a1/e59fa1f693e66a9606fb04f1da6f359f.jpg"
               }
               alt="Profile"
               className="w-full h-full object-cover"
@@ -154,15 +154,15 @@ export default function ProfileSettings() {
         </button>
       </div>
 
-      {showActions && (
-        <div className="mt-12 space-y-8">
-          <ProfileImage setPhoto={setPhoto} />
-          <EditProfile />
-          <UpdatePassword />
-          <FreezeAccount />
-          <DeleteAccount />
-        </div>
-      )}
+     {showActions && (
+  <div className="mt-12 space-y-8">
+    <ProfileImage setPhoto={setPhoto} />
+    <EditProfile />
+    <UpdatePassword />
+    <FreezeAccount />
+    <DeleteAccount />
+  </div>
+)}
 
       <Toaster />
     </div>
