@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import { object, string, ref } from "yup";
 import axios from "axios";
@@ -8,17 +8,29 @@ import { useNavigate } from "react-router-dom";
 export default function ResetPassword() {
     const navigate = useNavigate();
     const [apiError, setApiError] = useState(null);
+    const [email, setEmail] = useState("");
+
+    // جلب الايميل المخزن (مثلاً من localStorage)
+    useEffect(() => {
+        const storedEmail = localStorage.getItem("resetEmail");
+        if (!storedEmail) {
+            toast.error("Email not found. Please restart the reset process.");
+            navigate("/ForgetPassword"); // رجعي المستخدم للصفحة السابقة
+        } else {
+            setEmail(storedEmail);
+        }
+    }, [navigate]);
 
     const passwordRegex =
         /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/;
 
     const validationSchema = object({
-        otp: string(),
+        otp: string().required("OTP is required"),
         password: string()
             .required("Password is required")
             .matches(
                 passwordRegex,
-                "Password must start with a capital letter and include a number and special character"
+                "Password must start with a capital letter, include a number and special character"
             ),
         confirmPassword: string()
             .oneOf([ref("password")], "Passwords must match")
@@ -31,8 +43,8 @@ export default function ResetPassword() {
 
         try {
             const response = await axios.patch("/api/v1/auth/reset-password", {
-                email: values.email,  
-                otp: values.otp, 
+                email: email, // الايميل مخزن مسبقًا
+                otp: values.otp,
                 password: values.password,
                 confirmPassword: values.confirmPassword,
             });
@@ -57,7 +69,6 @@ export default function ResetPassword() {
 
     const formik = useFormik({
         initialValues: {
-            email: "", 
             otp: "",
             password: "",
             confirmPassword: "",
@@ -72,18 +83,10 @@ export default function ResetPassword() {
                 <h2 className="text-center text-2xl font-semibold text-gray-800 mb-1">
                     Reset Password
                 </h2>
+                <p className="text-center text-sm text-gray-600 mb-4">
+                    Resetting password for: <span className="font-medium">{email}</span>
+                </p>
                 <form onSubmit={formik.handleSubmit} className="space-y-4">
-                    <div>
-                        <input
-                            type="email"
-                            name="email"
-                            placeholder="Email"
-                            value={formik.values.email}
-                            onChange={formik.handleChange}
-                            className="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-200 focus:outline-none focus:border-sky-300"
-                        />
-                    </div>
-
                     <input
                         type="text"
                         name="otp"
@@ -92,6 +95,9 @@ export default function ResetPassword() {
                         onChange={formik.handleChange}
                         className="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-200 focus:outline-none focus:border-sky-300"
                     />
+                    {formik.errors.otp && (
+                        <p className="text-red-500 text-xs mt-1">{formik.errors.otp}</p>
+                    )}
 
                     <input
                         type="password"

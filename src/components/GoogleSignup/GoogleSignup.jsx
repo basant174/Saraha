@@ -23,15 +23,28 @@ export default function GoogleSignup({ onGoogleLogin }) {
 
         setLoading(true);
         try {
+          // 1️⃣ Social login
           const resLogin = await axios.post("/api/v1/auth/social-login", { idToken });
-          const accessToken = resLogin.data.data.creidentails.accessToken;
+
+          // Access token (مع دعم الاسم الغلط في response)
+          const accessToken =
+            resLogin.data?.data?.credentials?.accessToken || 
+            resLogin.data?.data?.creidentails?.accessToken;
+
+          if (!accessToken) {
+            toast.error("Access token not received");
+            return;
+          }
+
           localStorage.setItem("token", accessToken);
 
+          // 2️⃣ Get user profile
           const resProfile = await axios.get("/api/v1/user/", {
             headers: { Authorization: `USER ${accessToken}` },
           });
 
-          const currentUser = resProfile.data.data.users[0]; // لو عندك أكثر من يوزر، اعملي فلتر على البريد
+          const currentUser = resProfile?.data?.data?.users?.[0];
+
           if (currentUser) {
             localStorage.setItem("userId", currentUser._id);
             localStorage.setItem("firstName", currentUser.firstName);
@@ -39,18 +52,24 @@ export default function GoogleSignup({ onGoogleLogin }) {
             localStorage.setItem("email", currentUser.email);
             localStorage.setItem("gender", currentUser.gender);
 
-
             const profileImage =
-              user.cloudProfileImage?.secure_url || user.profileImage || null;
-            localStorage.setItem("profileImage", profileImage);
+              currentUser?.cloudProfileImage?.secure_url ||
+              currentUser?.profileImage ||
+              null;
+
+            if (profileImage) {
+              localStorage.setItem("profileImage", profileImage);
+            }
           }
 
           if (onGoogleLogin) onGoogleLogin();
+
           toast.success(`Welcome ${currentUser?.firstName || ""} 👋`);
+
           navigate("/home");
         } catch (error) {
-          console.error(error.response);
-          toast.error(error.response?.data?.message || "Google login failed");
+          console.error(error?.response || error);
+          toast.error(error?.response?.data?.message || "Google login failed");
         } finally {
           setLoading(false);
         }

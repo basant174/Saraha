@@ -7,7 +7,6 @@ import FreezeAccount from "../FreezeAccount/FreezeAccount";
 import DeleteAccount from "../DeleteAccount/DeleteAccount";
 import EditProfile from "../EditProfile/EditProfile";
 import ProfileImage from "../ProfileImage/ProfileImage";
-import SendMessage from "../SendMessage/SendMessage";
 
 export default function ProfileSettings() {
   const [profile, setProfile] = useState({
@@ -19,13 +18,15 @@ export default function ProfileSettings() {
   const [photo, setPhoto] = useState(localStorage.getItem("profileImage") || null);
   const [showActions, setShowActions] = useState(false);
 
+  const [isFrozen, setIsFrozen] = useState(false);
+
   // --- Share Link & SharedId State ---
   const [shareLink, setShareLink] = useState("");
-  const [sharedId, setSharedId] = useState(""); // مهم جدًا
+  const [sharedId, setSharedId] = useState(""); 
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    // --- Set profile info from localStorage ---
+    // قراءة البيانات من localStorage
     setProfile({
       firstName: localStorage.getItem("firstName") || "",
       lastName: localStorage.getItem("lastName") || "",
@@ -33,19 +34,15 @@ export default function ProfileSettings() {
       password: "",
     });
 
-    // --- Fetch share link and user ID ---
     async function getShareLink() {
       try {
         const res = await axios.get("/api/v1/user/share-profile", {
           headers: { Authorization: `USER ${token}` },
         });
 
-        console.log("Share Profile Response:", res.data); // تابعي هنا شكل البيانات
-
         const link = res.data.data?.shareLink || "";
         setShareLink(link);
 
-        // sharedId نجيبه من data.id مباشرة
         const id = res.data.data?.id || "";
         setSharedId(id);
 
@@ -63,30 +60,34 @@ export default function ProfileSettings() {
     toast.success("Link copied!");
   }
 
+  // 🔹 دالة لتحديث بيانات البروفايل بعد التعديل
+  const refreshProfile = () => {
+    setProfile({
+      firstName: localStorage.getItem("firstName") || "",
+      lastName: localStorage.getItem("lastName") || "",
+      gender: localStorage.getItem("gender") || "",
+      password: "",
+    });
+
+    
+  };
+
   return (
     <div className="max-w-2xl mx-auto mt-10 mb-20">
       {/* Profile Main Section */}
       <div className="flex gap-8">
-        {/* Profile Image */}
         <div className="w-1/4">
           <div className="w-44 h-44 rounded-xl overflow-hidden border border-gray-300">
             <img
-              src={
-                photo ||
-                "https://i.pinimg.com/736x/e5/9f/a1/e59fa1f693e66a9606fb04f1da6f359f.jpg"
-              }
+              src={photo || "https://i.pinimg.com/736x/e5/9f/a1/e59fa1f693e66a9606fb04f1da6f359f.jpg"}
               alt="Profile"
               className="w-full h-full object-cover"
             />
           </div>
         </div>
 
-        {/* Account Details */}
         <div className="flex-1 bg-white p-6 rounded-lg shadow-md my-5">
-          <h2 className="text-2xl font-bold mb-8 text-[#0d4369]">
-            Account Details
-          </h2>
-
+          <h2 className="text-2xl font-bold mb-8 text-[#0d4369]">Account Details</h2>
           <div className="grid gap-3">
             <label className="block text-sm font-medium text-[#156faf]">First Name</label>
             <input
@@ -115,14 +116,10 @@ export default function ProfileSettings() {
         </div>
       </div>
 
-      {/* --- Share Profile Section --- */}
+      {/* Share Profile Section */}
       <div className="bg-slate-100 w-full p-6 rounded-3xl text-center shadow-xl mt-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          Share your link 🔗
-        </h2>
-        <p className="text-sm text-gray-400 mb-4">
-          Let people send you anonymous messages
-        </p>
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">Share your link 🔗</h2>
+        <p className="text-sm text-gray-400 mb-4">Let people send you anonymous messages</p>
 
         <input
           value={shareLink}
@@ -137,14 +134,10 @@ export default function ProfileSettings() {
           >
             Copy Link
           </button>
-   
         </div>
-
-
-        {/* {sharedId && <SendMessage sharedId={sharedId} />} */}
       </div>
 
-      {/* Toggle Button */}
+      {/* Toggle Actions */}
       <div className="flex justify-end mt-10">
         <button
           onClick={() => setShowActions(!showActions)}
@@ -154,15 +147,19 @@ export default function ProfileSettings() {
         </button>
       </div>
 
-     {showActions && (
-  <div className="mt-12 space-y-8">
-    <ProfileImage setPhoto={setPhoto} />
-    <EditProfile />
-    <UpdatePassword />
-    <FreezeAccount />
-    <DeleteAccount />
-  </div>
-)}
+      {showActions && (
+        <div className="mt-12 space-y-8">
+          <ProfileImage setPhoto={setPhoto} />
+          <EditProfile onUpdate={refreshProfile} />
+          <UpdatePassword />
+          {/* <FreezeAccount /> */}
+                <FreezeAccount onFreeze={() => setIsFrozen(true)} />
+
+          {/* <DeleteAccount /> */}
+                <DeleteAccount isFrozen={isFrozen} />
+
+        </div>
+      )}
 
       <Toaster />
     </div>

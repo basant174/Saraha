@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-export default function FreezeAccount() {
+export default function FreezeAccount({ onFreeze }) {
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -16,6 +16,7 @@ export default function FreezeAccount() {
 
       toast.success("Account frozen successfully!");
       setShowModal(false);
+      onFreeze?.(); // يحدث حالة الأب بعد الفريز
     } catch (err) {
       console.error("Error freezing account:", err);
       toast.error("Failed to freeze account");

@@ -23,6 +23,11 @@ import { GoogleLogin } from '@react-oauth/google';
 import GoogleSignup from './components/GoogleSignup/GoogleSignup.jsx';
 import GetShareLink from './components/GetShareLink/GetShareLink.jsx';
 import PublicProfile from './components/PublicProfile/PublicProfile.jsx';
+import Dashboard from './components/Admin/Dashboard.jsx';
+import AdminLayout from './components/Admin/AdminLayout.jsx';
+import CreateUser from './components/Admin/CreateUser.jsx';
+
+
 
 function App() {
   const queryClient = new QueryClient();
@@ -45,23 +50,26 @@ function App() {
         { path: 'MyMessages', element: <MyMessages/> },
         { path: 'GoogleSignup', element: <GoogleSignup/> },
         { path: 'GetShareLink', element: <GetShareLink/> },
-        { path:"/u/:shareId", element:<PublicProfile/>} 
-
-
-
-
-
-
+        { path:  "/u/:shareId", element:<PublicProfile/>},
       ]},
+
+
+
+      {path: 'admin',element: <AdminLayout/> ,children: [
+        { path: 'dashboard', element: <Dashboard/> },
+        { path: 'createUser', element: <CreateUser/> },
+
+  ]
+}
+
+
   ])
   return (
     <>
-
           <QueryClientProvider client={queryClient}>
               <RouterProvider router={router}></RouterProvider>
               <Toaster />
           </QueryClientProvider>
-
     </>
   )
 }

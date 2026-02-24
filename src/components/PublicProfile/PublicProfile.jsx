@@ -8,25 +8,31 @@ export default function PublicProfile() {
   const [profileData, setProfileData] = useState(null);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadingProfile, setLoadingProfile] = useState(true);
 
-  useEffect(() => {
-    async function fetchProfile() {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get(`/api/v1/user/public/${shareId}`, {
-          headers: { Authorization: `USER ${token}` },
-        });
-
-        setProfileData(res.data.data);
-      } catch (err) {
-        console.error("Failed to fetch public profile:", err.response || err);
-        toast.error("Failed to load profile");
-      }
+  // 🔹 دالة لجلب بيانات البروفايل
+  const fetchProfile = async () => {
+    setLoadingProfile(true);
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get(`/api/v1/user/public/${shareId}`, {
+        headers: { Authorization: `USER ${token}` },
+      });
+      setProfileData(res.data.data);
+    } catch (err) {
+      console.error("Failed to fetch public profile:", err.response || err);
+      toast.error("Failed to load profile");
+    } finally {
+      setLoadingProfile(false);
     }
+  };
 
+  // 🔹 useEffect للتنفيذ عند تحميل الصفحة أو تغير shareId
+  useEffect(() => {
     fetchProfile();
   }, [shareId]);
 
+  // 🔹 ارسال رسالة
   const handleSend = async () => {
     const trimmedMessage = message.trim();
 
@@ -51,6 +57,9 @@ export default function PublicProfile() {
 
       toast.success("Message sent!");
       setMessage("");
+
+      // تحديث بيانات البروفايل فورًا بعد إرسال الرسالة
+      await fetchProfile();
     } catch (err) {
       console.error("Send message error:", err.response || err);
       toast.error(err.response?.data?.message || "Failed to send message");
@@ -59,7 +68,8 @@ export default function PublicProfile() {
     }
   };
 
-  if (!profileData) return <p className="text-center mt-20 text-gray-500">Loading...</p>;
+  if (loadingProfile || !profileData)
+    return <p className="text-center mt-20 text-gray-500">Loading...</p>;
 
   return (
     <div className="max-w-md mx-auto my-10">
@@ -68,16 +78,20 @@ export default function PublicProfile() {
       {/* Profile Card */}
       <div className="bg-gradient-to-b from-sky-50 to-white rounded-2xl shadow-lg p-6 text-center">
         <img
-          src={profileData.image || "https://i.pinimg.com/736x/9e/d9/fc/9ed9fc6f5360d475c83e1201ad2a909c.jpg"}
+          src={
+            profileData.image ||
+            "https://i.pinimg.com/736x/9e/d9/fc/9ed9fc6f5360d475c83e1201ad2a909c.jpg"
+          }
           alt={profileData.name}
           className="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-sky-200 object-cover shadow-md"
         />
         <h2 className="text-2xl font-bold text-[#0d4369] mb-2">{profileData.name}</h2>
-        {/* <p className="text-gray-500 mb-6">{profileData.bio || "This user prefers to stay mysterious 😎"}</p> */}
 
         {/* Message Box */}
         <div className="text-left mt-7">
-          <label className="block text-sm font-medium mb-2 text-[#156faf]">Send a message</label>
+          <label className="block text-sm font-medium mb-2 text-[#156faf]">
+            Send a message
+          </label>
           <textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}

@@ -2,32 +2,23 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 
-export default function EditProfile() {
+export default function EditProfile({ onUpdate }) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(true);
 
-  // 🔹 Get user data
   const fetchUserData = async () => {
     try {
       const token = localStorage.getItem('token');
-
-      const res = await axios.get(
-        'http://localhost:3000/api/v1/user/getUser',
+      const res = await axios.get('/api/v1/user/getUser',
         {
-          headers: {
-            Authorization: `USER ${token}`,
-          },
-        }
-      );
-
+        headers: { Authorization: `USER ${token}` },
+      });
       const user = res.data?.data?.userData;
-
       setFirstName(user?.firstName || '');
       setLastName(user?.lastName || '');
-
-    } catch (error) {
+    } catch {
       toast.error('Failed to load profile data');
     } finally {
       setLoadingData(false);
@@ -38,100 +29,69 @@ export default function EditProfile() {
     fetchUserData();
   }, []);
 
-  // 🔹 Update profile
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
       const token = localStorage.getItem('token');
-
       await axios.patch(
         'http://localhost:3000/api/v1/user/update-profile',
-        {
-          firstName,
-          lastName,
-        },
-        {
-          headers: {
-            Authorization: `USER ${token}`,
-            'Content-Type': 'application/json',
-          },
-        }
+        { firstName, lastName },
+        { headers: { Authorization: `USER ${token}` } }
       );
 
       toast.success('Profile updated successfully!');
-    } catch (error) {
+      // تحديث localStorage
+      localStorage.setItem('firstName', firstName);
+      localStorage.setItem('lastName', lastName);
+
+      // تحديث الأب
+      if (onUpdate) onUpdate();
+
+    } catch {
       toast.error('Failed to update profile');
     } finally {
       setLoading(false);
     }
   };
 
-  // 🔹 Loading skeleton
-  if (loadingData) {
-    return (
-      <div className="max-w-2xl mx-auto mt-20 p-6 bg-white rounded-lg shadow animate-pulse">
-        <div className="h-6 bg-gray-200 rounded w-1/3 mb-6"></div>
-        <div className="h-12 bg-gray-200 rounded mb-4"></div>
-        <div className="h-12 bg-gray-200 rounded mb-4"></div>
-      </div>
-    );
-  }
+  if (loadingData) return (
+    <div className="max-w-2xl mx-auto mt-20 p-6 bg-white rounded-lg shadow animate-pulse"></div>
+  );
 
   return (
-    <>
-      <Toaster position="top-right" />
+    <form onSubmit={handleSubmit} className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-lg mb-10">
+      <h1 className="text-2xl font-bold mb-8 text-[#0d4369]">Edit Profile</h1>
+      <div className="mb-8">
+        <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+        <input
+          type="text"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          className="w-full p-3 border border-gray-300 rounded focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
+        />
+      </div>
 
-      <form
-        onSubmit={handleSubmit}
-        className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-lg mb-10"
-      >
-        <h1 className="text-2xl font-bold mb-8 text-[#0d4369]">
-          Edit Profile
-        </h1>
+      <div className="mb-8">
+        <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+        <input
+          type="text"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          className="w-full p-3 border border-gray-300 rounded focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
+        />
+      </div>
 
-        {/* First Name */}
-        <div className="mb-8">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            First Name
-          </label>
-          <input
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded
-            focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
-          />
-        </div>
-
-        {/* Last Name */}
-        <div className="mb-8">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Last Name
-          </label>
-          <input
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded
-            focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
-          />
-        </div>
-
-        {/* Submit */}
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            disabled={loading}
-            className={`bg-gray-200 text-gray-700 py-2 px-6 font-medium
-              hover:bg-[#5b9ac7] hover:text-white transition
-              ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            {loading ? 'Saving...' : 'Save Changes'}
-          </button>
-        </div>
-      </form>
-    </>
+      <div className="flex justify-end">
+        <button
+          type="submit"
+          disabled={loading}
+          className={`bg-gray-200 text-gray-700 py-2 px-6 font-medium hover:bg-[#5b9ac7] hover:text-white transition ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+        >
+          {loading ? 'Saving...' : 'Save Changes'}
+        </button>
+      </div>
+    </form>
   );
 }

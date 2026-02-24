@@ -42,34 +42,36 @@ export default function Signup() {
     gender: string().required("Gender is required"),
   });
 
+async function sendDataToSignup(values) {
+  let toastId = toast.loading("Signing up...");
+  setApiError(null);
 
-  async function sendDataToSignup(values) {
-    let toastId = toast.loading("Signing up...");
-    setApiError(null);
+  try {
+    const response = await axios.post("/api/v1/auth/signup", values);
 
-    try {
-      const response = await axios.post(
-"/api/v1/auth/signup",
-        values,
-      );
+    if (response.data.message === "User created successfully") {
+      toast.success("Account created successfully!");
 
-      if (response.data.message === "User created successfully") {
-        toast.success("Account created successfully!");
-        setTimeout(() => {
-          navigate("/ConfirmEmail", { state: { email: values.email } });
-        }, 2000);
-      }
+      // حفظ البيانات في localStorage
+      localStorage.setItem("firstName", values.firstName);
+      localStorage.setItem("lastName", values.lastName);
+      localStorage.setItem("gender", values.gender);
+      localStorage.setItem("phone", values.phone);
+      localStorage.setItem("email", values.email);
+      // إذا السيرفر بيرجع صورة البروفايل ممكن كمان تحطها
+      // localStorage.setItem("profileImage", response.data.data.image || "");
 
-
-    } catch (error) {
-      console.log(error.response?.data);
-      toast.error(error.response?.data?.message || "Something went wrong!");
+      setTimeout(() => {
+        navigate("/ConfirmEmail", { state: { email: values.email } });
+      }, 2000);
     }
-    finally {
-      toast.dismiss(toastId);
-    }
+  } catch (error) {
+    console.log(error.response?.data);
+    toast.error(error.response?.data?.message || "Something went wrong!");
+  } finally {
+    toast.dismiss(toastId);
   }
-
+}
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -79,7 +81,7 @@ export default function Signup() {
       confirmPassword: "",
       phone: "",
       gender: "",
-      role: "ADMIN",
+      role: "USER",
     },
     validationSchema,
     onSubmit: sendDataToSignup,

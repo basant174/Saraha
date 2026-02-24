@@ -7,7 +7,7 @@ export default function ShareProfile() {
   const [shareLink, setShareLink] = useState("");
   const [sharedId, setSharedId] = useState("");
   const token = localStorage.getItem("token");
-
+console.log("TOKEN:", token);
   useEffect(() => {
     async function getShareLink() {
       try {

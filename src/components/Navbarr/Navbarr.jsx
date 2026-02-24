@@ -39,6 +39,8 @@ export default function Navbar() {
         <Link to="/Home">
           <li className="hover:text-gray-900 cursor-pointer transition">Home</li>
         </Link>
+
+        
    {/* <Link to="/MessagesList">
           <li className="hover:text-gray-900 cursor-pointer transition">MessagesList</li>
         </Link> */}
