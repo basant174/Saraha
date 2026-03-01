@@ -25,13 +25,13 @@ export default function Sidebar() {
             textDecoration: "none",
             color: "white",
             background: isActive ? "#1976d2" : "transparent",
-            outline: "none", // هذا يزيل الخط الخارجي
-            boxShadow: "none", // يزيل أي ظل يمكن أن يظهر
+            outline: "none", 
+            boxShadow: "none",
           })}
         >
           Dashboard
         </NavLink>
-
+{/* 
         <NavLink
           to="/admin/createUser"
           style={({ isActive }) => ({
@@ -45,22 +45,9 @@ export default function Sidebar() {
           })}
         >
           Users
-        </NavLink>
+        </NavLink> */}
 
-        <NavLink
-          to="/admin/messages"
-          style={({ isActive }) => ({
-            padding: "10px",
-            borderRadius: "8px",
-            textDecoration: "none",
-            color: "white",
-            background: isActive ? "#1976d2" : "transparent",
-            outline: "none",
-            boxShadow: "none",
-          })}
-        >
-          Messages
-        </NavLink>
+ 
       </nav>
     </div>
   );

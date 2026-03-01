@@ -26,35 +26,37 @@ export default function Login() {
       ),
   });
 
-  async function sendDataToLogin(values) {
-    let toastId = toast.loading("Logging in...");
-    setApiError(null);
+async function sendDataToLogin(values) {
+  let toastId = toast.loading("Logging in...");
+  setApiError(null);
 
-    try {
-      const response = await axios.post("/api/v1/auth/login", values);
-      const accessToken = response.data.data.creidentails.accessToken;
-      localStorage.setItem("token", accessToken);
+  try {
+   
+    const response = await axios.post("/api/v1/auth/login", values);
+    const accessToken = response.data.data.creidentails.accessToken;
+    localStorage.setItem("token", accessToken);
 
-      const resProfile = await axios.get("/api/v1/user/", {
-        headers: { Authorization: `ADMIN ${accessToken}` },
-      });
+    const resProfile = await axios.get("/api/v1/user/getUser", {
+      headers: { Authorization: `USER ${accessToken}` }, 
+    });
 
-      const currentUser = resProfile.data.data.users.find(
-        (u) => u.email === values.email
-      );
-      if (currentUser) localStorage.setItem("userId", currentUser._id);
+ 
+    const currentUser = resProfile.data.data.user;
+    if (currentUser) localStorage.setItem("userId", currentUser._id);
 
-      toast.success("Logged in successfully!");
-      setTimeout(() => navigate("/home"), 1000);
-    } catch (error) {
-      const status = error.response?.status;
-      if (status === 400) toast.error("Email or password is incorrect.");
-      else if (status === 404) toast.error("This email is incorrect.");
-      else toast.error("Something went wrong. Please try again.");
-    } finally {
-      toast.dismiss(toastId);
-    }
+    toast.success("Logged in successfully!");
+    setTimeout(() => navigate("/home"), 1000);
+  } catch (error) {
+    console.log(error.response);
+    toast.error(error.response?.data?.message || "Something went wrong!");
+    const status = error.response?.status;
+    if (status === 400) toast.error("This Password is incorrect.");
+    else if (status === 404) toast.error("This email is incorrect.");
+    //else toast.error("Something went wrong. Please try again.");
+  } finally {
+    toast.dismiss(toastId);
   }
+}
 
   const formik = useFormik({
     initialValues: { email: "", password: "" },

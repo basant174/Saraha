@@ -1,3 +1,4 @@
+// ProfileSettings.jsx
 import React, { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
@@ -17,10 +18,8 @@ export default function ProfileSettings() {
   });
   const [photo, setPhoto] = useState(localStorage.getItem("profileImage") || null);
   const [showActions, setShowActions] = useState(false);
-
   const [isFrozen, setIsFrozen] = useState(false);
 
-  // --- Share Link & SharedId State ---
   const [shareLink, setShareLink] = useState("");
   const [sharedId, setSharedId] = useState(""); 
   const token = localStorage.getItem("token");
@@ -40,11 +39,8 @@ export default function ProfileSettings() {
           headers: { Authorization: `USER ${token}` },
         });
 
-        const link = res.data.data?.shareLink || "";
-        setShareLink(link);
-
-        const id = res.data.data?.id || "";
-        setSharedId(id);
+        setShareLink(res.data.data?.shareLink || "");
+        setSharedId(res.data.data?.id || "");
 
       } catch (error) {
         console.error("Share link error:", error.response || error);
@@ -60,7 +56,6 @@ export default function ProfileSettings() {
     toast.success("Link copied!");
   }
 
-  // 🔹 دالة لتحديث بيانات البروفايل بعد التعديل
   const refreshProfile = () => {
     setProfile({
       firstName: localStorage.getItem("firstName") || "",
@@ -68,8 +63,6 @@ export default function ProfileSettings() {
       gender: localStorage.getItem("gender") || "",
       password: "",
     });
-
-    
   };
 
   return (
@@ -94,7 +87,10 @@ export default function ProfileSettings() {
               type="text"
               value={profile.firstName}
               readOnly
-              className="w-[280px] input bg-gray-100 cursor-not-allowed border-gray-300 rounded focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
+              disabled={isFrozen}
+              className={`w-[280px] input ${
+                isFrozen ? "bg-gray-100 cursor-not-allowed" : "border-gray-300 focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
+              }`}
             />
 
             <label className="block text-sm font-medium text-[#156faf]">Last Name</label>
@@ -102,7 +98,10 @@ export default function ProfileSettings() {
               type="text"
               value={profile.lastName}
               readOnly
-              className="w-[280px] input bg-gray-100 cursor-not-allowed border-gray-300 rounded focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
+              disabled={isFrozen}
+              className={`w-[280px] input ${
+                isFrozen ? "bg-gray-100 cursor-not-allowed" : "border-gray-300 focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
+              }`}
             />
 
             <label className="block text-sm font-medium text-[#156faf]">Gender</label>
@@ -110,32 +109,48 @@ export default function ProfileSettings() {
               type="text"
               value={profile.gender}
               readOnly
-              className="w-[280px] input bg-gray-100 cursor-not-allowed border-gray-300 rounded focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
+              disabled={isFrozen}
+              className={`w-[280px] input ${
+                isFrozen ? "bg-gray-100 cursor-not-allowed" : "border-gray-300 focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
+              }`}
             />
           </div>
         </div>
       </div>
 
-      {/* Share Profile Section */}
-      <div className="bg-slate-100 w-full p-6 rounded-3xl text-center shadow-xl mt-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">Share your link 🔗</h2>
-        <p className="text-sm text-gray-400 mb-4">Let people send you anonymous messages</p>
+{/* Share Profile Section */}
+<div className="bg-slate-100 w-full p-6 rounded-3xl text-center shadow-xl mt-6">
+  <h2 className="text-2xl font-bold text-gray-800 mb-2">
+    Share your link 🔗
+  </h2>
 
-        <input
-          value={shareLink}
-          readOnly
-          className="w-full p-3 rounded-xl border text-sm text-gray-600 mb-4"
-        />
+  {isFrozen ? (
+    <div className="bg-red-50 border border-red-200 text-red-600 p-4 rounded-xl mt-6">
+      🚫 Your account is frozen. You cannot share your profile link.
+    </div>
+  ) : (
+    <>
+      <p className="text-sm text-gray-400 mb-4">
+        Let people send you anonymous messages
+      </p>
 
-        <div className="flex gap-3 mb-6">
-          <button
-            onClick={copyLink}
-            className="flex-1 bg-sky-500 text-white py-2 rounded-full hover:bg-sky-600 transition"
-          >
-            Copy Link
-          </button>
-        </div>
+      <input
+        value={shareLink}
+        readOnly
+        className="w-full p-3 rounded-xl border text-sm text-gray-600 mb-4"
+      />
+
+      <div className="flex gap-3 mb-6">
+        <button
+          onClick={copyLink}
+          className="flex-1 bg-sky-500 text-white py-2 rounded-full hover:bg-sky-600 transition"
+        >
+          Copy Link
+        </button>
       </div>
+    </>
+  )}
+</div>
 
       {/* Toggle Actions */}
       <div className="flex justify-end mt-10">
@@ -149,15 +164,11 @@ export default function ProfileSettings() {
 
       {showActions && (
         <div className="mt-12 space-y-8">
-          <ProfileImage setPhoto={setPhoto} />
-          <EditProfile onUpdate={refreshProfile} />
-          <UpdatePassword />
-          {/* <FreezeAccount /> */}
-                <FreezeAccount onFreeze={() => setIsFrozen(true)} />
-
-          {/* <DeleteAccount /> */}
-                <DeleteAccount isFrozen={isFrozen} />
-
+          <ProfileImage setPhoto={setPhoto} isFrozen={isFrozen} />
+          <EditProfile onUpdate={refreshProfile} isFrozen={isFrozen} />
+          <UpdatePassword isFrozen={isFrozen} />
+          <FreezeAccount onFreeze={() => setIsFrozen(true)} />
+          <DeleteAccount isFrozen={isFrozen} />
         </div>
       )}
 

@@ -26,6 +26,8 @@ import PublicProfile from './components/PublicProfile/PublicProfile.jsx';
 import Dashboard from './components/Admin/Dashboard.jsx';
 import AdminLayout from './components/Admin/AdminLayout.jsx';
 import CreateUser from './components/Admin/CreateUser.jsx';
+import AdminLogin from './components/Admin/AdminLogin.jsx';
+import EmailLoginRedirect from './components/EmailLoginRedirect/EmailLoginRedirect.jsx';
 
 
 
@@ -51,14 +53,18 @@ function App() {
         { path: 'GoogleSignup', element: <GoogleSignup/> },
         { path: 'GetShareLink', element: <GetShareLink/> },
         { path:  "/u/:shareId", element:<PublicProfile/>},
+     { path: "/email-login-redirect", element: <EmailLoginRedirect />},
+
       ]},
 
 
-
-      {path: 'admin',element: <AdminLayout/> ,children: [
-        { path: 'dashboard', element: <Dashboard/> },
-        { path: 'createUser', element: <CreateUser/> },
-
+{ 
+  path: 'admin', 
+  element: <AdminLayout />, 
+  children: [
+    { index: true, element: <AdminLogin /> }, // Default page عند فتح /admin
+    { path: 'dashboard', element: <Dashboard /> },
+    { path: 'createUser', element: <CreateUser /> },
   ]
 }
 

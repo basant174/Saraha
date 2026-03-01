@@ -1,9 +1,10 @@
+// UpdatePassword.jsx
 import React, { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-export default function UpdatePassword() {
+export default function UpdatePassword({ isFrozen }) {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -49,17 +50,13 @@ export default function UpdatePassword() {
       );
 
       toast.success("Password updated successfully");
-
       localStorage.removeItem("token");
 
       setTimeout(() => {
         navigate("/login");
       }, 1500);
-
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Something went wrong"
-      );
+      toast.error(error.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -83,8 +80,10 @@ export default function UpdatePassword() {
           name="password"
           value={formData.password}
           onChange={handleChange}
-          className="w-full p-3 border border-gray-300 rounded
-           focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
+          disabled={isFrozen}
+          className={`w-full p-3 border border-gray-300 rounded focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df] ${
+            isFrozen ? "bg-gray-100 cursor-not-allowed" : ""
+          }`}
         />
       </div>
 
@@ -97,8 +96,10 @@ export default function UpdatePassword() {
           name="newPassword"
           value={formData.newPassword}
           onChange={handleChange}
-          className="w-full p-3 border border-gray-300 rounded
-           focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
+          disabled={isFrozen}
+          className={`w-full p-3 border border-gray-300 rounded focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df] ${
+            isFrozen ? "bg-gray-100 cursor-not-allowed" : ""
+          }`}
         />
       </div>
 
@@ -111,16 +112,20 @@ export default function UpdatePassword() {
           name="confirmPassword"
           value={formData.confirmPassword}
           onChange={handleChange}
-          className="w-full p-3 border border-gray-300 rounded
-           focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
+          disabled={isFrozen}
+          className={`w-full p-3 border border-gray-300 rounded focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df] ${
+            isFrozen ? "bg-gray-100 cursor-not-allowed" : ""
+          }`}
         />
       </div>
 
       <div className="flex justify-end">
         <button
           type="submit"
-          disabled={loading}
-          className="bg-gray-200 text-gray-700 py-2 px-6 font-medium hover:bg-[#5b9ac7] hover:text-white transition"
+          disabled={loading || isFrozen}
+          className={`bg-gray-200 text-gray-700 py-2 px-6 font-medium ${
+            !isFrozen ? "hover:bg-[#5b9ac7] hover:text-white" : ""
+          } transition`}
         >
           {loading ? "Updating..." : "Confirm Password"}
         </button>
