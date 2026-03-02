@@ -41,7 +41,7 @@ export default function ProfileSettings() {
 
         setShareLink(res.data.data?.shareLink || "");
         setSharedId(res.data.data?.id || "");
-
+console.log("User ID:", sharedId, sharedId.length);
       } catch (error) {
         console.error("Share link error:", error.response || error);
         toast.error("Failed to load share link");
@@ -162,16 +162,20 @@ export default function ProfileSettings() {
         </button>
       </div>
 
-      {showActions && (
-        <div className="mt-12 space-y-8">
-          <ProfileImage setPhoto={setPhoto} isFrozen={isFrozen} />
-          <EditProfile onUpdate={refreshProfile} isFrozen={isFrozen} />
-          <UpdatePassword isFrozen={isFrozen} />
-          <FreezeAccount onFreeze={() => setIsFrozen(true)} />
-          <DeleteAccount isFrozen={isFrozen} />
-        </div>
-      )}
+{showActions && sharedId && (
+  <div className="mt-12 space-y-8">
+    <ProfileImage setPhoto={setPhoto} isFrozen={isFrozen} />
+    <EditProfile onUpdate={refreshProfile} isFrozen={isFrozen} />
+    <UpdatePassword isFrozen={isFrozen} />
 
+    <FreezeAccount
+      userId={sharedId}
+      initialFreezed={isFrozen}
+    />
+
+    <DeleteAccount isFrozen={isFrozen} />
+  </div>
+)}
       <Toaster />
     </div>
   );

@@ -12,7 +12,7 @@ export default function AdminLayout() {
       <div
         style={{
           marginLeft: !isLoginPage ? "260px" : "0",
-          padding: "20px",
+         
           width: "100%",
           minHeight: "100vh",
           background: "#f4f6f9",

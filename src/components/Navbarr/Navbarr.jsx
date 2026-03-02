@@ -34,20 +34,18 @@ export default function Navbar() {
         </Link>
       </div>
 
-      {/* Center Links */}
+  
       <ul className="hidden md:flex gap-8 text-gray-600 font-medium">
         <Link to="/Home">
           <li className="hover:text-gray-900 cursor-pointer transition">Home</li>
         </Link>
 
         
-   {/* <Link to="/MessagesList">
-          <li className="hover:text-gray-900 cursor-pointer transition">MessagesList</li>
-        </Link> */}
+
         
       </ul>
 
-      {/* Right Auth */}
+
       <div className="flex items-center gap-5 mr-6">
         {!token && (
           <>
@@ -58,7 +56,7 @@ export default function Navbar() {
 
         {token && (
           <div className="relative" ref={dropdownRef}>
-            {/* Profile Icon */}
+        
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
               className="text-gray-700 hover:text-gray-900 transition text-lg w-9 h-9 flex justify-center items-center bg-white rounded-full"
@@ -66,7 +64,7 @@ export default function Navbar() {
               <i className="fa-regular fa-user"></i>
             </button>
 
-            {/* Dropdown Menu */}
+           
             {dropdownOpen && (
               <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg border border-gray-200 z-50">
                 <Link
@@ -77,18 +75,23 @@ export default function Navbar() {
                 Profile
                 </Link>
 
-
-
-                
+{/*                 
                 <Link
                   to="/MyMessages"
                   className="block px-4 py-2 text-gray-700 hover:bg-sky-100 transition"
                   onClick={() => setDropdownOpen(false)}
                 >
                   Messages
+                </Link> */}
+
+      
+                <Link
+                  to="/login"
+                  className="block px-4 py-2 text-gray-700 hover:bg-sky-100 transition"
+                  onClick={() => setDropdownOpen(false)}
+                >
+                  Login
                 </Link>
-
-
                 
                 <button
                   onClick={handleLogout}
