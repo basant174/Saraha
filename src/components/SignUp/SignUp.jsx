@@ -164,11 +164,13 @@ async function sendDataToSignup(values) {
               value={formik.values.password}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className="w-full px-4 py-2.5 text-sm rounded-lg border
-               border-gray-200 focus:outline-none focus:border-yellow-500 placeholder-gray-400"
+            className="w-full px-4 py-2.5 text-sm rounded-lg  border-gray-200
+               focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
             />
-            {formik.touched.password && formik.errors.password && (
-              <p className="text-red-500 text-sm mt-1">{formik.errors.password}</p>
+            {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+              <p className="text-red-500 text-sm mt-1">
+                {formik.errors.confirmPassword}
+              </p>
             )}
           </div>
 
