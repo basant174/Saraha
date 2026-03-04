@@ -26,7 +26,7 @@ export default function GoogleSignup({ onGoogleLogin }) {
           // 1️⃣ Social login
           const resLogin = await axios.post("/api/v1/auth/social-login", { idToken });
 
-          // Access token (مع دعم الاسم الغلط في response)
+        
           const accessToken =
             resLogin.data?.data?.credentials?.accessToken || 
             resLogin.data?.data?.creidentails?.accessToken;
@@ -38,8 +38,7 @@ export default function GoogleSignup({ onGoogleLogin }) {
 
           localStorage.setItem("token", accessToken);
 
-          // 2️⃣ Get user profile
-          const resProfile = await axios.get("/api/v1/user/", {
+          const resProfile = await axios.get("/api/v1/user/getUser", {
             headers: { Authorization: `USER ${accessToken}` },
           });
 
