@@ -9,6 +9,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState(null)
+  const [search, setSearch] = useState("")
 
   const fetchUsers = async () => {
     try {
@@ -44,7 +45,6 @@ export default function Dashboard() {
     loadData()
   }, [])
 
-  // ====== Delete User ======
   const handleDeleteUser = async (userId) => {
     try {
       const token = localStorage.getItem("adminToken");
@@ -62,7 +62,6 @@ export default function Dashboard() {
     }
   };
 
-  // ====== Freeze User ======
   const handleFreezeUser = async (userId) => {
     try {
       const token = localStorage.getItem("adminToken");
@@ -84,7 +83,6 @@ export default function Dashboard() {
     }
   };
 
-  // ====== Restore User ======
   const handleRestoreUser = async (userId) => {
     try {
       const token = localStorage.getItem("adminToken");
@@ -175,6 +173,7 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* ====== Create User Button ====== */}
       <div className="flex justify-end mb-4">
         <button
           onClick={() => setShowModal(true)}
@@ -182,6 +181,23 @@ export default function Dashboard() {
         >
           Create User
         </button>
+      </div>
+
+      {/* ====== Search Input ====== */}
+      <div className="mb-4 flex justify-center mt-5">
+        <div className="relative w-1/2">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+            <i className="fa-solid fa-magnifying-glass"></i>
+          </span>
+          <input
+            type="text"
+            placeholder="Search users..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-full shadow-sm 
+            focus:outline-none focus:ring-2 focus:ring-[#156faf] focus:border-[#156faf] transition"
+          />
+        </div>
       </div>
 
       {/* ====== Users Table ====== */}
@@ -204,7 +220,13 @@ export default function Dashboard() {
             </thead>
 
             <tbody className="divide-y divide-gray-200">
-              {users.map((user) => (
+              {users
+                .filter(user =>
+                  `${user.firstName} ${user.lastName} ${user.email}`
+                    .toLowerCase()
+                    .includes(search.toLowerCase())
+                )
+                .map((user) => (
                 <tr key={user._id} className="cursor-pointer">
                   <td className="px-6 py-4 whitespace-nowrap flex items-center gap-3">
                     <div className="bg-gray-200 w-10 h-10 flex items-center justify-center rounded-full text-xl">
@@ -260,22 +282,23 @@ export default function Dashboard() {
             </tbody>
           </table>
         )}
-
-        {showModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="p-6 w-[320px] relative">
-              <CreateUser
-                onSuccess={() => {
-                  setShowModal(false)
-                  fetchUsers()
-                  fetchMessages()
-                }}
-              />
-              <button onClick={() => setShowModal(false)} className="absolute top-10 -right-9 text-gray-500 hover:text-gray-700">✕</button>
-            </div>
-          </div>
-        )}
       </div>
+
+      {/* ====== Create User Modal ====== */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="p-6 w-[320px] relative">
+            <CreateUser
+              onSuccess={() => {
+                setShowModal(false)
+                fetchUsers()
+                fetchMessages()
+              }}
+            />
+            <button onClick={() => setShowModal(false)} className="absolute top-10 -right-9 text-gray-500 hover:text-gray-700">✕</button>
+          </div>
+        </div>
+      )}
 
       {/* ====== User Details Popup ====== */}
       {selectedUser && (

@@ -38,30 +38,24 @@ export default function GoogleSignup({ onGoogleLogin }) {
 
           localStorage.setItem("token", accessToken);
 
-          const resProfile = await axios.get("/api/v1/user/getUser", {
-            headers: { Authorization: `USER ${accessToken}` },
-          });
+const resProfile = await axios.get("/api/v1/user/getUser", {
+  headers: { Authorization: `USER ${accessToken}` },
+});
 
-          const currentUser = resProfile?.data?.data?.users?.[0];
+const currentUser = resProfile?.data?.data?.userData;
+console.log("Google profile response:", resProfile.data);
+if (currentUser) {
+  localStorage.setItem("userId", currentUser.id || currentUser._id);
+  localStorage.setItem("firstName", currentUser.firstName);
+  localStorage.setItem("lastName", currentUser.lastName);
+  localStorage.setItem("email", currentUser.email);
+  localStorage.setItem("gender", currentUser.gender);
 
-          if (currentUser) {
-            localStorage.setItem("userId", currentUser._id);
-            localStorage.setItem("firstName", currentUser.firstName);
-            localStorage.setItem("lastName", currentUser.lastName);
-            localStorage.setItem("email", currentUser.email);
-            localStorage.setItem("gender", currentUser.gender);
+  const profileImage =
+    currentUser?.cloudProfileImage?.secure_url || currentUser?.profileImage || null;
 
-            const profileImage =
-              currentUser?.cloudProfileImage?.secure_url ||
-              currentUser?.profileImage ||
-              null;
-
-            if (profileImage) {
-              localStorage.setItem("profileImage", profileImage);
-            }
-          }
-
-          if (onGoogleLogin) onGoogleLogin();
+  if (profileImage) localStorage.setItem("profileImage", profileImage);
+}       if (onGoogleLogin) onGoogleLogin();
 
           toast.success(`Welcome ${currentUser?.firstName || ""} 👋`);
 

@@ -28,6 +28,7 @@ import AdminLayout from './components/Admin/AdminLayout.jsx';
 import CreateUser from './components/Admin/CreateUser.jsx';
 import AdminLogin from './components/Admin/AdminLogin.jsx';
 import EmailLoginRedirect from './components/EmailLoginRedirect/EmailLoginRedirect.jsx';
+import FavoriteMessages from './components/FavoriteMessages/FavoriteMessages.jsx';
 
 
 
@@ -36,7 +37,8 @@ function App() {
   let router = createHashRouter([
     {
       path: '', element: <Layout />, children: [
-        { index: true, element: <Signup/> },
+        { index: true, element: <Home/> },
+        { path: 'Signup', element: <Signup /> },
         { path: 'login', element: <Login /> },
         { path: 'Logout', element: <Logout/> },  
         { path: 'About', element: <About/> },
@@ -44,6 +46,8 @@ function App() {
         { path: 'ConfirmEmail', element: <ConfirmEmail/> },
         { path: 'profile', element: <Profile/> },
         { path: 'Messages', element: <Messages/> },
+        { path: 'FavoriteMessages', element: <FavoriteMessages/> },
+
         { path: 'ForgetPassword', element: <ForgetPassword/> },
         { path: 'resetPassword', element: <ResetPassword /> },
         { path: 'ProfileSettings', element: <ProfileSettings /> },
@@ -62,12 +66,11 @@ function App() {
   path: 'admin', 
   element: <AdminLayout />, 
   children: [
-    { index: true, element: <AdminLogin /> }, // Default page عند فتح /admin
+    { index: true, element: <AdminLogin /> }, 
     { path: 'dashboard', element: <Dashboard /> },
     { path: 'createUser', element: <CreateUser /> },
   ]
 }
-
 
   ])
   return (

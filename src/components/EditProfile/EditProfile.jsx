@@ -31,13 +31,13 @@ export default function EditProfile({ onUpdate, isFrozen }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isFrozen) return; // منع أي تعديل لو الحساب مجمد
+    if (isFrozen) return; 
 
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
       await axios.patch(
-        'http://localhost:3000/api/v1/user/update-profile',
+        '/api/v1/user/update-profile',
         { firstName, lastName },
         { headers: { Authorization: `USER ${token}` } }
       );

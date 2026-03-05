@@ -52,14 +52,12 @@ async function sendDataToSignup(values) {
     if (response.data.message === "User created successfully") {
       toast.success("Account created successfully!");
 
-      // حفظ البيانات في localStorage
+    
       localStorage.setItem("firstName", values.firstName);
       localStorage.setItem("lastName", values.lastName);
       localStorage.setItem("gender", values.gender);
       localStorage.setItem("phone", values.phone);
       localStorage.setItem("email", values.email);
-      // إذا السيرفر بيرجع صورة البروفايل ممكن كمان تحطها
-      // localStorage.setItem("profileImage", response.data.data.image || "");
 
       setTimeout(() => {
         navigate("/ConfirmEmail", { state: { email: values.email } });

@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 export default function Sidebar() {
   return (
     <div
+      className="hidden lg:flex flex-col"
       style={{
         width: "260px",
         height: "100vh",
@@ -25,29 +26,10 @@ export default function Sidebar() {
             textDecoration: "none",
             color: "white",
             background: isActive ? "#1976d2" : "transparent",
-            outline: "none", 
-            boxShadow: "none",
           })}
         >
           Dashboard
         </NavLink>
-{/* 
-        <NavLink
-          to="/admin/createUser"
-          style={({ isActive }) => ({
-            padding: "10px",
-            borderRadius: "8px",
-            textDecoration: "none",
-            color: "white",
-            background: isActive ? "#1976d2" : "transparent",
-            outline: "none",
-            boxShadow: "none",
-          })}
-        >
-          Users
-        </NavLink> */}
-
- 
       </nav>
     </div>
   );

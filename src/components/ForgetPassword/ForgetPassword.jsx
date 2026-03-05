@@ -14,33 +14,7 @@ export default function ForgetPassword() {
       .email("Email is invalid"),
   });
 
-// async function sendForgetPassword(values) {
-//   let toastId = toast.loading("Sending request...");
 
-//   try {
-//     const response = await axios.patch(
-//       "/api/v1/auth/forget-password",
-//       values
-//     );
-
-//     if (response.status === 200) {
-//       toast.success("Check your email ✌️");
-
-//       setTimeout(() => {
-//         navigate("/resetPassword");
-//       }, 1500);
-//     }
-//   } catch (error) {
-//     const status = error.response?.status;
-//     if (status === 404) {
-//       toast.error("This email is not registered.");
-//     } else {
-//       toast.error("Something went wrong. Please try again.");
-//     }
-//   } finally {
-//     toast.dismiss(toastId);
-//   }
-// }
 async function sendForgetPassword(values) {
   let toastId = toast.loading("Sending request...");
 
@@ -51,7 +25,6 @@ async function sendForgetPassword(values) {
     );
 
     if (response.status === 200) {
-      // خزن الايميل في localStorage
       localStorage.setItem("resetEmail", values.email);
 
       toast.success("Check your email ✌️");

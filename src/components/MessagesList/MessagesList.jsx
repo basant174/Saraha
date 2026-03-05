@@ -4,7 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 export default function MessagesList() {
   const [messages, setMessages] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(""); // default search term
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
 
   const fetchMessages = async (content = searchTerm, page = 2, limit = 6) => {

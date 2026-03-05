@@ -25,7 +25,6 @@ export default function ProfileSettings() {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    // قراءة البيانات من localStorage
     setProfile({
       firstName: localStorage.getItem("firstName") || "",
       lastName: localStorage.getItem("lastName") || "",
@@ -41,7 +40,7 @@ export default function ProfileSettings() {
 
         setShareLink(res.data.data?.shareLink || "");
         setSharedId(res.data.data?.id || "");
-        console.log("User ID:", res.data.data?.id);
+console.log("User ID:", sharedId, sharedId.length);
       } catch (error) {
         console.error("Share link error:", error.response || error);
         toast.error("Failed to load share link");
@@ -66,11 +65,11 @@ export default function ProfileSettings() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-10 mb-20 px-4">
+    <div className="max-w-2xl mx-auto mt-10 mb-20">
       {/* Profile Main Section */}
-      <div className="flex flex-col md:flex-row gap-8">
-        <div className="w-full md:w-1/4">
-          <div className="w-44 h-44 rounded-xl overflow-hidden border border-gray-300 mx-auto md:mx-0">
+      <div className="flex gap-8">
+        <div className="w-1/4">
+          <div className="w-44 h-44 rounded-xl overflow-hidden border border-gray-300">
             <img
               src={photo || "https://i.pinimg.com/736x/e5/9f/a1/e59fa1f693e66a9606fb04f1da6f359f.jpg"}
               alt="Profile"
@@ -88,10 +87,8 @@ export default function ProfileSettings() {
               value={profile.firstName}
               readOnly
               disabled={isFrozen}
-              className={`w-full input ${
-                isFrozen
-                  ? "bg-gray-100 cursor-not-allowed"
-                  : "border-gray-300 focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
+              className={`w-[280px] input ${
+                isFrozen ? "bg-gray-100 cursor-not-allowed" : "border-gray-300 focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
               }`}
             />
 
@@ -101,10 +98,8 @@ export default function ProfileSettings() {
               value={profile.lastName}
               readOnly
               disabled={isFrozen}
-              className={`w-full input ${
-                isFrozen
-                  ? "bg-gray-100 cursor-not-allowed"
-                  : "border-gray-300 focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
+              className={`w-[280px] input ${
+                isFrozen ? "bg-gray-100 cursor-not-allowed" : "border-gray-300 focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
               }`}
             />
 
@@ -114,49 +109,47 @@ export default function ProfileSettings() {
               value={profile.gender}
               readOnly
               disabled={isFrozen}
-              className={`w-full input ${
-                isFrozen
-                  ? "bg-gray-100 cursor-not-allowed"
-                  : "border-gray-300 focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
+              className={`w-[280px] input ${
+                isFrozen ? "bg-gray-100 cursor-not-allowed" : "border-gray-300 focus:border-[#a1c5df] focus:outline-none focus:ring-1 focus:ring-[#a1c5df]"
               }`}
             />
           </div>
         </div>
       </div>
 
-      {/* Share Profile Section */}
-      <div className="bg-slate-100 w-full p-6 rounded-3xl text-center shadow-xl mt-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          Share your link 🔗
-        </h2>
+{/* Share Profile Section */}
+<div className="bg-slate-100 w-full p-6 rounded-3xl text-center shadow-xl mt-6">
+  <h2 className="text-2xl font-bold text-gray-800 mb-2">
+    Share your link 🔗
+  </h2>
 
-        {isFrozen ? (
-          <div className="bg-red-50 border border-red-200 text-red-600 p-4 rounded-xl mt-6">
-            🚫 Your account is frozen. You cannot share your profile link.
-          </div>
-        ) : (
-          <>
-            <p className="text-sm text-gray-400 mb-4">
-              Let people send you anonymous messages
-            </p>
+  {isFrozen ? (
+    <div className="bg-red-50 border border-red-200 text-red-600 p-4 rounded-xl mt-6">
+      🚫 Your account is frozen. You cannot share your profile link.
+    </div>
+  ) : (
+    <>
+      <p className="text-sm text-gray-400 mb-4">
+        Let people send you anonymous messages
+      </p>
 
-            <input
-              value={shareLink}
-              readOnly
-              className="w-full p-3 rounded-xl border text-sm text-gray-600 mb-4"
-            />
+      <input
+        value={shareLink}
+        readOnly
+        className="w-full p-3 rounded-xl border text-sm text-gray-600 mb-4"
+      />
 
-            <div className="flex gap-3 mb-6">
-              <button
-                onClick={copyLink}
-                className="flex-1 bg-sky-500 text-white py-2 rounded-full hover:bg-sky-600 transition"
-              >
-                Copy Link
-              </button>
-            </div>
-          </>
-        )}
+      <div className="flex gap-3 mb-6">
+        <button
+          onClick={copyLink}
+          className="flex-1 bg-sky-500 text-white py-2 rounded-full hover:bg-sky-600 transition"
+        >
+          Copy Link
+        </button>
       </div>
+    </>
+  )}
+</div>
 
       {/* Toggle Actions */}
       <div className="flex justify-end mt-10">
@@ -168,15 +161,20 @@ export default function ProfileSettings() {
         </button>
       </div>
 
-      {showActions && sharedId && (
-        <div className="mt-12 space-y-8">
-          <ProfileImage setPhoto={setPhoto} isFrozen={isFrozen} />
-          <EditProfile onUpdate={refreshProfile} isFrozen={isFrozen} />
-          <UpdatePassword isFrozen={isFrozen} />
-          <FreezeAccount userId={sharedId} initialFreezed={isFrozen} />
-          <DeleteAccount isFrozen={isFrozen} />
-        </div>
-      )}
+{showActions && sharedId && (
+  <div className="mt-12 space-y-8">
+    <ProfileImage setPhoto={setPhoto} isFrozen={isFrozen} />
+    <EditProfile onUpdate={refreshProfile} isFrozen={isFrozen} />
+    <UpdatePassword isFrozen={isFrozen} />
+
+    <FreezeAccount
+      userId={sharedId}
+      initialFreezed={isFrozen}
+    />
+
+    <DeleteAccount isFrozen={isFrozen} />
+  </div>
+)}
       <Toaster />
     </div>
   );

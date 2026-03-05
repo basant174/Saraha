@@ -10,12 +10,11 @@ export default function ResetPassword() {
     const [apiError, setApiError] = useState(null);
     const [email, setEmail] = useState("");
 
-    // جلب الايميل المخزن (مثلاً من localStorage)
     useEffect(() => {
         const storedEmail = localStorage.getItem("resetEmail");
         if (!storedEmail) {
             toast.error("Email not found. Please restart the reset process.");
-            navigate("/ForgetPassword"); // رجعي المستخدم للصفحة السابقة
+            navigate("/ForgetPassword"); 
         } else {
             setEmail(storedEmail);
         }
@@ -43,7 +42,7 @@ export default function ResetPassword() {
 
         try {
             const response = await axios.patch("/api/v1/auth/reset-password", {
-                email: email, // الايميل مخزن مسبقًا
+                email: email, 
                 otp: values.otp,
                 password: values.password,
                 confirmPassword: values.confirmPassword,

@@ -10,7 +10,7 @@ export default function ConfirmEmail() {
 
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
-  const [timer, setTimer] = useState(180); // 3 minutes = 180 seconds
+  const [timer, setTimer] = useState(180); 
 
   
   useEffect(() => {
@@ -72,7 +72,7 @@ export default function ConfirmEmail() {
     try {
       await axios.patch("/api/v1/auth/re-send-otp", { email });
       toast.success("OTP sent to your email!");
-      setTimer(180); // نرجّع العداد 3 دقايق تاني
+      setTimer(180); 
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to resend OTP");
     }

@@ -3,7 +3,7 @@ import logo from "../../../public/img/logo.png";
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token"); // أو الاسم اللي انتي مستخدماه
+  const token = localStorage.getItem("token"); 
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -48,10 +48,10 @@ export default function Navbar() {
         </Link>
       </ul>
 
-      {/* Right Auth */}
+   
       <div className="flex items-center gap-5 mr-6">
 
-        {/* لو مش عامل Login */}
+      
         {!token && (
           <>
             <Link
@@ -70,7 +70,7 @@ export default function Navbar() {
           </>
         )}
 
-        {/* لو عامل Login */}
+
         {token && (
           <button
             onClick={handleLogout}

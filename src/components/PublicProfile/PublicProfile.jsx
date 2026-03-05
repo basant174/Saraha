@@ -10,7 +10,6 @@ export default function PublicProfile() {
   const [loading, setLoading] = useState(false);
   const [loadingProfile, setLoadingProfile] = useState(true);
 
-  // 🔹 دالة لجلب بيانات البروفايل
   const fetchProfile = async () => {
     setLoadingProfile(true);
     try {
@@ -27,12 +26,11 @@ export default function PublicProfile() {
     }
   };
 
-  // 🔹 useEffect للتنفيذ عند تحميل الصفحة أو تغير shareId
   useEffect(() => {
     fetchProfile();
   }, [shareId]);
 
-  // 🔹 ارسال رسالة
+
   const handleSend = async () => {
     const trimmedMessage = message.trim();
 
@@ -58,7 +56,6 @@ export default function PublicProfile() {
       toast.success("Message sent!");
       setMessage("");
 
-      // تحديث بيانات البروفايل فورًا بعد إرسال الرسالة
       await fetchProfile();
     } catch (err) {
       console.error("Send message error:", err.response || err);

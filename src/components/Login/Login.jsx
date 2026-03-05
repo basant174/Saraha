@@ -9,7 +9,7 @@ import axios from "axios";
 export default function Login() {
   const navigate = useNavigate();
   const [apiError, setApiError] = useState(null);
-  const [isGoogleLogin, setIsGoogleLogin] = useState(false); // <-- state جديدة
+  const [isGoogleLogin, setIsGoogleLogin] = useState(false); 
 
   const regexPassword =
     /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/;

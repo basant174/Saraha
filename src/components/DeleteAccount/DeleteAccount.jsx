@@ -8,7 +8,6 @@ export default function DeleteAccount({ isFrozen }) {
   const [showModal, setShowModal] = useState(false);
 
   const handleDelete = async () => {
-    // لو الحساب مش متجمد، نطلع تحذير
     if (!isFrozen) {
       toast.error("You must freeze your account before deleting it.");
       setShowModal(false);
@@ -25,10 +24,9 @@ export default function DeleteAccount({ isFrozen }) {
       toast.success("Account deleted successfully!");
       setShowModal(false);
 
-      // Redirect بعد الحذف
       setTimeout(() => {
         window.location.href = "/login";
-      }, 2000); // 2 ثانية تأخير
+      }, 2000); 
     } catch (err) {
       console.error("Error deleting account:", err);
       toast.error("Failed to delete account");

@@ -8,7 +8,7 @@ export default function ProfileImage({ setPhoto, isFrozen }) {
   const [loading, setLoading] = useState(false);
 
   const handleFileChange = async (e) => {
-    if (isFrozen) return; // منع التغيير لو الحساب مجمد
+    if (isFrozen) return; 
 
     const file = e.target.files[0];
     if (!file) return;

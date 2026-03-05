@@ -9,7 +9,7 @@ export default function ShareProfile({ isFrozen }) {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    if (isFrozen) return; // لو الحساب مجمد منجيبش اللينك أصلاً
+    if (isFrozen) return; 
 
     async function getShareLink() {
       try {
