@@ -49,7 +49,7 @@ async function sendDataToSignup(values) {
   try {
     // const response = await axios.post("/api/v1/auth/signup", values);
 const response = await axios.post(
-  "http://ec2-13-51-203-134.eu-north-1.compute.amazonaws.com/api/v1/auth/signup",
+  `${import.meta.env.VITE_API_URL}/v1/auth/signup`,
   values
 );
     if (response.data.message === "User created successfully") {
