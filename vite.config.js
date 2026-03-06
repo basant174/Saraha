@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       // '/api': 'http://localhost:3000',
-      '/api': 'http://ec2-13-51-203-134.eu-north-1.compute.amazonaws.com/',
+      '/api': 'https://sara7a-app-pohu.onrender.com',
 
     },
   },
