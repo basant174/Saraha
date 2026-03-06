@@ -36,7 +36,7 @@ function App() {
   const queryClient = new QueryClient();
   let router = createHashRouter([
     {
-      path: '', element: <Layout />, children: [
+      path: '/', element: <Layout />, children: [
         { index: true, element: <Home/> },
         { path: 'Signup', element: <Signup /> },
         { path: 'login', element: <Login /> },
