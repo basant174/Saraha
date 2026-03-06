@@ -35,7 +35,7 @@ export default function Navbar() {
     <nav className="bg-[#e7e7e7] px-8 py-3 flex items-center justify-between relative">
       
       {/* Logo */}
-      <div className="flex items-center gap-2 ml-8">
+      <div className="flex items-center gap-2 md:ml-8">
         <Link to="/">
           <img src={logo} alt="Saraha Logo" className="w-32 h-auto" />
         </Link>
