@@ -47,11 +47,8 @@ async function sendDataToSignup(values) {
   setApiError(null);
 
   try {
-    // const response = await axios.post("/api/v1/auth/signup", values);
-const response = await axios.post(
-  `${import.meta.env.VITE_API_URL}api/v1/auth/signup`,
-  values
-);
+    const response = await axios.post("/api/v1/auth/signup", values);
+
     if (response.data.message === "User created successfully") {
       toast.success("Account created successfully!");
 
