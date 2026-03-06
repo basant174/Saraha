@@ -50,7 +50,6 @@ async function sendDataToSignup(values) {
     // const response = await axios.post("/api/v1/auth/signup", values);
 const API_URL = "http://ec2-13-51-203-134.eu-north-1.compute.amazonaws.com/api/v1";
 const response = await axios.post(`${API_URL}/auth/signup`, values);
-
     if (response.data.message === "User created successfully") {
       toast.success("Account created successfully!");
 
