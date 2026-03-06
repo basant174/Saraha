@@ -47,7 +47,10 @@ async function sendDataToSignup(values) {
   setApiError(null);
 
   try {
-    const response = await axios.post("/api/v1/auth/signup", values);
+const response = await axios.post(
+  "https://sara7a-app-pohu.onrender.com/api/v1/auth/signup",
+  values
+);
 
     if (response.data.message === "User created successfully") {
       toast.success("Account created successfully!");
