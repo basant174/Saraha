@@ -5,7 +5,7 @@ import Login from './components/Login/Login'
 import Layout from './components/Layout/Layout'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
-import Signup from './components/SignUp/SignUp.jsx';
+import Signup from './components/Signup/Signup.jsx';
 import Home from './components/Home/Home.jsx';
 import ConfirmEmail from './components/ConfirmEmail/ConfirmEmail.jsx';
 import Logout from './components/Logout/Logout.jsx';
